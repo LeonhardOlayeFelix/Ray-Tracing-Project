@@ -57,13 +57,16 @@ namespace RayTracer
             return writeableBitmap;
 
         }
-        public static object Main()
+        public static object Main(IProgress<double> progress)
         {
-            
             int image_width = 256;
             int image_height = 256;
             int color_depth = 3;
             int[,,] bitmap = new int[image_height, image_width, color_depth];
+
+            int total = image_height * image_width;
+            int count = 0;
+
             for (int i = 0; i < image_height; i++)
             {
                 for (int j =0; j < image_width; j++)
@@ -75,6 +78,11 @@ namespace RayTracer
                     bitmap[i, j, 0] = (int)(255.9999 * r);
                     bitmap[i, j, 1] = (int)(255.9999 * g);
                     bitmap[i, j, 2] = (int)(255.9999 * b);
+
+                    count++;
+
+                    if (count % 500 == 0)
+                        progress?.Report((double)count / total);
                 }
             }
 
