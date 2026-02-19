@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Point3 = RayTracer.Vec3;
 
 namespace RayTracer
 {
@@ -59,6 +60,10 @@ namespace RayTracer
         }
         public static object Main(IProgress<double> progress)
         {
+            Point3 p1 = new Point3();
+            Point3 p2 = new Point3();
+            Point3 p3 = p1 + p2;
+
             int image_width = 256;
             int image_height = 256;
             int color_depth = 3;
