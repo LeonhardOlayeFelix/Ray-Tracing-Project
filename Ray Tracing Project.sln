@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ray Tracing Project", "Ray 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracer", "RayTracer\RayTracer.csproj", "{A883A186-4B4A-4029-A16B-E7AD8C33340C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectUtilities", "ProjectUtilities\ProjectUtilities.csproj", "{4633C9C3-FB35-4BFF-B989-6BDF17C90AE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A883A186-4B4A-4029-A16B-E7AD8C33340C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A883A186-4B4A-4029-A16B-E7AD8C33340C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A883A186-4B4A-4029-A16B-E7AD8C33340C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4633C9C3-FB35-4BFF-B989-6BDF17C90AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4633C9C3-FB35-4BFF-B989-6BDF17C90AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4633C9C3-FB35-4BFF-B989-6BDF17C90AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4633C9C3-FB35-4BFF-B989-6BDF17C90AE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

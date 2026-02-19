@@ -77,7 +77,7 @@ namespace RayTracer
                 for (int j =0; j < image_width; j++)
                 {
                     double r = (double)i / (image_height - 1);
-                    double g = (double)j / (image_height - 1);
+                    double g = (double)j / (image_width - 1);
                     double b = 0.0;
 
                     bitmap[i, j, 0] = (int)(255.9999 * r);

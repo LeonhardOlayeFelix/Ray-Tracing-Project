@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectUtilities;
 using Ray_Tracing_Project.IOCContainer;
 using RayTracer;
 using System;
@@ -26,12 +27,13 @@ namespace Ray_Tracing_Project.Model
         {
             _progress = new RenderProgress();
             _progress.ProgressChanged += OnProgressChanged;
+            
             Source = (WriteableBitmap)RayTracer.Program.Main(_progress);
         }
 
         private void OnProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
-            ProgressPercentage = (double)e.ProgressPercentage;
+            DispatcherHelp.CheckInvokeOnUI(() => ProgressPercentage = (double)e.ProgressPercentage);
             OnPropertyChanged(nameof(ProgressPercentage));
         }
     }
