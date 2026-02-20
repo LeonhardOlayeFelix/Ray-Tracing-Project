@@ -17,7 +17,7 @@ namespace RayTracer
             _center = center;
             _radius = radius;
         }
-        public override bool hit(Ray ray, double t_min, double t_max, ref HitInfo hitInfo)
+        public override bool hit(Ray ray, Interval bounds, ref HitInfo hitInfo)
         {
             Direction oc = _center - ray.Origin;
             double a = ray.Direction.LengthSquared;
@@ -32,10 +32,10 @@ namespace RayTracer
 
             double t = (h - sqrt) / a;
 
-            if (t <= t_min || t >= t_max)
+            if (!bounds.Surrounds(t))
             {
                 t = (h + sqrt) / a;
-                if (t <= t_min || t >= t_max)
+                if (!bounds.Surrounds(t))
                     return false;
             }
 

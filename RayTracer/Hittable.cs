@@ -13,7 +13,7 @@ namespace RayTracer
 {
     public abstract class Hittable
     {
-        public abstract bool hit(Ray ray, double t_min, double t_max, ref HitInfo hitInfo);
+        public abstract bool hit(Ray ray, Interval bounds, ref HitInfo hitInfo);
     }
    
 }

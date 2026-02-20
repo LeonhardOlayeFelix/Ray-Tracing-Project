@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 using Point = RayTracer.Vec3;
 using Colour = RayTracer.Vec3;
 using Direction = RayTracer.Vec3;
-using ProjectUtilities;
 
 namespace RayTracer
 {
@@ -97,9 +96,8 @@ namespace RayTracer
         {
 
             HitInfo hitInfo = new HitInfo();
-            world.hit(ray, 0, int.MaxValue, ref hitInfo);
 
-            if (hitInfo.t > 0.0)
+            if (world.hit(ray, new Interval(0, MathHelper.Infinity), ref hitInfo))
             {
                 return 0.5 * new Colour(hitInfo.Normal.X + 1, hitInfo.Normal.Y + 1, hitInfo.Normal.Z + 1);
             }

@@ -22,15 +22,15 @@ namespace RayTracer
         {
             objects.Clear();
         }
-        public override bool hit(Ray ray, double t_min, double t_max, ref HitInfo hitInfo)
+        public override bool hit(Ray ray, Interval bounds, ref HitInfo hitInfo)
         {
             HitInfo temp = new HitInfo();
             bool hit_anything = false;
-            double closestSoFar = t_max;
+            double closestSoFar = bounds.Max;
 
             foreach (Hittable obj in objects)
             {
-                if (obj.hit(ray, t_min, closestSoFar, ref temp))
+                if (obj.hit(ray, new Interval(bounds.Min, closestSoFar), ref temp))
                 {
                     hit_anything = true;
                     closestSoFar = temp.t;

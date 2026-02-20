@@ -21,7 +21,7 @@ namespace Ray_Tracing_Project.ViewModel
     {
         private RenderProgress _progress;
         private ICommand _traceCommand;
-        private double _radius = 1;
+        private double _radius = 0.5;
         private double _x = 0;
         private double _y = 0;
         private double _z = -1;
@@ -79,7 +79,7 @@ namespace Ray_Tracing_Project.ViewModel
         }
         private void OnTrace()
         {
-            Source = (WriteableBitmap)RayTracer.Program.Main(new Point(0, 0, -5), Radius);
+            Source = (WriteableBitmap)RayTracer.Program.Main(new Point(X, Y, Z), Radius);
         }
         private void OnProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
