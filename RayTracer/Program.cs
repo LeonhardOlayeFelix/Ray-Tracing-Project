@@ -16,10 +16,13 @@ namespace RayTracer
 {
     public static class Program
     {
-
-        public static object Main(IProgress<double> progress)
+        public static Point Center;
+        public static double Radius;
+        public static object Main(Point center, double radius)
         {
-            Logger.Initialise("C:\\Users\\leonh\\OneDrive\\Desktop\\log");
+            Center = center;
+            Radius = radius;
+            //Logger.Initialise("C:\\Users\\leonh\\OneDrive\\Desktop\\log");
 
             //Image
             double aspectRatio = 16.0 / 9.0;
@@ -40,25 +43,25 @@ namespace RayTracer
             Point Q = C - new Direction(0, 0, focalLength) - 0.5 * (Vv + Vu);
             Point P_00 = Q + 0.5 * (Du + Dv);
 
-            #region Logging
-            Logger.Log("===================================Setup=========================================");
-            Logger.Log("Image Setup:");
-            Logger.Log($"   Aspect Ratio: {aspectRatio}");
-            Logger.Log($"   Pixel Width: {imageWidth}");
-            Logger.Log($"   Pixel Height: {imageHeight}");
-            Logger.Log("Camera Setup:");
-            Logger.Log($"   Focal Length: {focalLength}");
-            Logger.Log($"   Camera Center: {C}");
-            Logger.Log("Vector Setup:");
-            Logger.Log($"   Viewport Width: {viewportWidth}");
-            Logger.Log($"   Viewport Height: {viewportHeight}");
-            Logger.Log($"   Vu: {Vu}");
-            Logger.Log($"   Vv: {Vv}");
-            Logger.Log($"   Du: {Du}");
-            Logger.Log($"   Dv: {Dv}");
-            Logger.Log($"   Q: {Q}");
-            Logger.Log($"   P_00: {P_00}");
-            #endregion
+            //#region Logging
+            //Logger.Log("===================================Setup=========================================");
+            //Logger.Log("Image Setup:");
+            //Logger.Log($"   Aspect Ratio: {aspectRatio}");
+            //Logger.Log($"   Pixel Width: {imageWidth}");
+            //Logger.Log($"   Pixel Height: {imageHeight}");
+            //Logger.Log("Camera Setup:");
+            //Logger.Log($"   Focal Length: {focalLength}");
+            //Logger.Log($"   Camera Center: {C}");
+            //Logger.Log("Vector Setup:");
+            //Logger.Log($"   Viewport Width: {viewportWidth}");
+            //Logger.Log($"   Viewport Height: {viewportHeight}");
+            //Logger.Log($"   Vu: {Vu}");
+            //Logger.Log($"   Vv: {Vv}");
+            //Logger.Log($"   Du: {Du}");
+            //Logger.Log($"   Dv: {Dv}");
+            //Logger.Log($"   Q: {Q}");
+            //Logger.Log($"   P_00: {P_00}");
+            //#endregion
 
             imageHeight = imageHeight < 1 ? 1 : imageHeight;
             int color_depth = 3;
@@ -80,9 +83,6 @@ namespace RayTracer
                     WriteColour(i, j, pixelColour, bitmap);
 
                     count++;
-
-                    if (count % 500 == 0)
-                        progress?.Report((double)count / total);
                 }
             }
 
@@ -91,6 +91,9 @@ namespace RayTracer
 
         private static Colour ComputeRayColour(Ray ray)
         {
+            if (HitSphere(new Point(0, 0, -5), 1, ray))
+                return new Colour(1, 0, 0);
+
             Vec3 unitDirection = ray.Direction.UnitVector;
             double a = 0.5 * (unitDirection.Y + 1.0);
             return (1.0 - a) * new Colour(1.0, 1.0, 1.0) + a * new Colour(0.5, 0.7, 1.0);
@@ -149,5 +152,17 @@ namespace RayTracer
             bitmap[row, col, 2] = (int)(255.9999 * colour[2]);
         }
 
+        private static bool HitSphere(Point center, double radius, Ray ray)
+        {
+            center = Center;
+            radius = Radius;
+            Direction oc = center - ray.Origin;
+            double a = Vec3Util.Dot(ray.Direction, ray.Direction);
+            double b = -2.0 * Vec3Util.Dot(ray.Direction, oc);
+            double c = Vec3Util.Dot(oc, oc) - radius * radius;
+            double discriminant = b * b - 4 * a * c;
+
+            return discriminant >= 0;
+        }
     }
 }
