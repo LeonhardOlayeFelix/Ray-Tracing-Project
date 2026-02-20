@@ -69,7 +69,11 @@ namespace RayTracer
             int total = imageHeight * imageWidth;
             int count = 0;
 
-
+            Sphere sphere1 = new Sphere(Center, Radius);
+            Sphere sphere2 = new Sphere(new Point(0, -100.5, -1), 100);
+            HittableCollection world = new HittableCollection();
+            world.Add(sphere1);
+            world.Add(sphere2);
 
             for (int i = 0; i < imageHeight; i++)
             {
@@ -79,7 +83,7 @@ namespace RayTracer
                     Direction rayDirection = pixelLocation - C;
                     Ray ray = new Ray(C, rayDirection);
 
-                    Colour pixelColour = ComputeRayColour(ray);
+                    Colour pixelColour = ComputeRayColour(ray, world);
                     WriteColour(i, j, pixelColour, bitmap);
 
                     count++;
@@ -89,11 +93,11 @@ namespace RayTracer
             return ProduceBitmap(bitmap);
         }
 
-        private static Colour ComputeRayColour(Ray ray)
+        private static Colour ComputeRayColour(Ray ray, Hittable world)
         {
-            Sphere sphere = new Sphere(Center, Radius);
+
             HitInfo hitInfo = new HitInfo();
-            sphere.hit(ray, 0, 10000, hitInfo);
+            world.hit(ray, 0, int.MaxValue, ref hitInfo);
 
             if (hitInfo.t > 0.0)
             {

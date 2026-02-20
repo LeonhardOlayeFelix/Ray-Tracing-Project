@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Ray_Tracing_Project.Model;
 using Ray_Tracing_Project.View;
 using System;
 using System.Collections.Generic;

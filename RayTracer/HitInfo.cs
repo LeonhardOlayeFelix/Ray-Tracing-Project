@@ -14,5 +14,12 @@ namespace RayTracer
         public Point IntersectionPoint { get; set; }
         public Direction Normal { get; set; }
         public double t { get; set; }
+        public bool FrontFace { get; set; }
+
+        public void SetFaceNormal(Ray ray, Direction outwardsNormal)
+        {
+            double dot = Vec3Util.Dot(ray.Direction, outwardsNormal);
+            Normal = dot > 0.0 ? -outwardsNormal : outwardsNormal;
+        }
     }
 }

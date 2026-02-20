@@ -14,11 +14,6 @@
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModelLocator}" Path="MainViewModel"/>
     </Window.DataContext>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -30,7 +25,7 @@
             <Button Width="90" Height="20" Content="Trace" Command="{Binding TraceCommand}" Margin="0 0 10 0"/>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Radius"/>
-                <Slider Width="90" Value="{Binding Radius, Mode=TwoWay}" Minimum="0.1" Maximum="3"/>
+                <Slider Width="90" Value="{Binding Radius, Mode=TwoWay}" Minimum="0.1" Maximum="1"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="X"/>

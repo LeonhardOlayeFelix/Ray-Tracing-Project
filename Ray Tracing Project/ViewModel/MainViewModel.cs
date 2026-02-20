@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using Point = RayTracer.Vec3;
 using Colour = RayTracer.Vec3;
 using Direction = RayTracer.Vec3;
-namespace Ray_Tracing_Project.Model
+namespace Ray_Tracing_Project.ViewModel
 {
     public class MainViewModel : ObservableObject
     {
@@ -83,7 +83,7 @@ namespace Ray_Tracing_Project.Model
         }
         private void OnProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
-            DispatcherHelp.CheckInvokeOnUI(() => ProgressPercentage = (double)e.ProgressPercentage);
+            DispatcherHelp.CheckInvokeOnUI(() => ProgressPercentage = e.ProgressPercentage);
             OnPropertyChanged(nameof(ProgressPercentage));
         }
         private void OnScenePropertyChanged()

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ray_Tracing_Project.IOCContainer;
-using Ray_Tracing_Project.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
