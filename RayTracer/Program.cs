@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Point = RayTracer.Vec3;
 using Colour = RayTracer.Vec3;
+using Direction = RayTracer.Vec3;
 using ProjectUtilities;
 
 namespace RayTracer
@@ -20,12 +21,24 @@ namespace RayTracer
         {
             Logger.Initialise("C:\\Users\\leonh\\OneDrive\\Desktop\\log");
 
-            //setup
+            //Image
             double aspectRatio = 16.0 / 9.0;
             int imageWidth = 400;
             int imageHeight = (int)(imageWidth / aspectRatio);
+
+            //Camera
+            double focalLength = 1;
             double viewportHeight = 2.0;
             double viewportWidth = viewportHeight * ((double)imageWidth / imageHeight);
+
+            //Vector setup
+            Point C = new Point(0, 0, 0);
+            Direction Vu = new Direction(viewportWidth, 0, 0);
+            Direction Vv = new Direction(0, -viewportHeight, 0);
+            Direction Du = Vu / imageWidth;
+            Direction Dv = Vv / imageHeight;
+            Point Q = C - new Direction(0, 0, focalLength) - 0.5 * (Vv + Vu);
+            Point P00 = Q + 0.5 * (Du + Dv);
 
             Logger.Log("Hello");
 
