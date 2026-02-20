@@ -38,9 +38,27 @@ namespace RayTracer
             Direction Du = Vu / imageWidth;
             Direction Dv = Vv / imageHeight;
             Point Q = C - new Direction(0, 0, focalLength) - 0.5 * (Vv + Vu);
-            Point P00 = Q + 0.5 * (Du + Dv);
+            Point P_00 = Q + 0.5 * (Du + Dv);
 
-            Logger.Log("Hello");
+            #region Logging
+            Logger.Log("=====Setup======");
+            Logger.Log("Image Setup:");
+            Logger.Log($"   Aspect Ratio: {aspectRatio}");
+            Logger.Log($"   Pixel Width: {imageWidth}");
+            Logger.Log($"   Pixel Height: {imageHeight}");
+            Logger.Log("Camera Setup:");
+            Logger.Log($"   Focal Length: {focalLength}");
+            Logger.Log($"   Camera Center: {C}");
+            Logger.Log("Vector Setup:");
+            Logger.Log($"   Viewport Width: {viewportWidth}");
+            Logger.Log($"   Viewport Height: {viewportHeight}");
+            Logger.Log($"   Vu: {Vu}");
+            Logger.Log($"   Vv: {Vv}");
+            Logger.Log($"   Du: {Du}");
+            Logger.Log($"   Dv: {Dv}");
+            Logger.Log($"   Q: {Q}");
+            Logger.Log($"   P_00: {P_00}");
+            #endregion
 
             imageHeight = imageHeight < 1 ? 1 : imageHeight;
             int color_depth = 3;
