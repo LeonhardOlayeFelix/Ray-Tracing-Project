@@ -51,7 +51,7 @@ namespace RayTracer
             //Logger.Log($"   Pixel Height: {imageHeight}");
             //Logger.Log("Camera Setup:");
             //Logger.Log($"   Focal Length: {focalLength}");
-            //Logger.Log($"   Camera Center: {C}");
+            //Logger.Log($"   Camera _center: {C}");
             //Logger.Log("Vector Setup:");
             //Logger.Log($"   Viewport Width: {viewportWidth}");
             //Logger.Log($"   Viewport Height: {viewportHeight}");
@@ -91,8 +91,14 @@ namespace RayTracer
 
         private static Colour ComputeRayColour(Ray ray)
         {
-            if (HitSphere(new Point(0, 0, -5), 1, ray))
-                return new Colour(1, 0, 0);
+            Sphere sphere = new Sphere(Center, Radius);
+            HitInfo hitInfo = new HitInfo();
+            sphere.hit(ray, 0, 10000, hitInfo);
+
+            if (hitInfo.t > 0.0)
+            {
+                return 0.5 * new Colour(hitInfo.Normal.X + 1, hitInfo.Normal.Y + 1, hitInfo.Normal.Z + 1);
+            }
 
             Vec3 unitDirection = ray.Direction.UnitVector;
             double a = 0.5 * (unitDirection.Y + 1.0);
@@ -152,17 +158,19 @@ namespace RayTracer
             bitmap[row, col, 2] = (int)(255.9999 * colour[2]);
         }
 
-        private static bool HitSphere(Point center, double radius, Ray ray)
+        private static double HitSphere(Point center, double radius, Ray ray)
         {
             center = Center;
             radius = Radius;
             Direction oc = center - ray.Origin;
-            double a = Vec3Util.Dot(ray.Direction, ray.Direction);
-            double b = -2.0 * Vec3Util.Dot(ray.Direction, oc);
-            double c = Vec3Util.Dot(oc, oc) - radius * radius;
-            double discriminant = b * b - 4 * a * c;
+            double a = ray.Direction.LengthSquared;
+            double h = Vec3Util.Dot(ray.Direction, oc);
+            double c = oc.LengthSquared - radius * radius;
+            double discriminant = h*h - a*c;
 
-            return discriminant >= 0;
+            if (discriminant < 0)
+                return -1.0;
+            return (h - Math.Sqrt(discriminant)) / a;
         }
     }
 }
