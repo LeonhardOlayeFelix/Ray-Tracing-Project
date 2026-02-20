@@ -32,8 +32,9 @@ namespace RayTracer
         public static Vec3 operator *(double t, Vec3 v) => new Vec3(t * v.e[0], t * v.e[1], t * v.e[2]);
         public static Vec3 operator *(Vec3 v, double t) => t * v;
         public static Vec3 operator /(Vec3 v, double t) => (1.0 / t) * v;
-        public double Length() => Math.Sqrt(LengthSquared());
-        public double LengthSquared() => e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
+        public double Length => Math.Sqrt(LengthSquared);
+        public double LengthSquared => e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
+        public Vec3 UnitVector => Vec3Util.UnitVector(this);
         public Vec3 AddInPlace(Vec3 v) 
         { 
             e[0] += v.e[0]; 
@@ -55,5 +56,5 @@ namespace RayTracer
     { 
         public static double Dot(Vec3 u, Vec3 v) => u.X * v.X + u.Y * v.Y + u.Z * v.Z; 
         public static Vec3 Cross(Vec3 u, Vec3 v) => new Vec3(u.Y * v.Z - u.Z * v.Y, u.Z * v.X - u.X * v.Z, u.X * v.Y - u.Y * v.X); 
-        public static Vec3 UnitVector(Vec3 v) => v / v.Length(); }
+        public static Vec3 UnitVector(Vec3 v) => v / v.Length; }
 }
