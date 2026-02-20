@@ -27,7 +27,7 @@ namespace RayTracer
             int imageHeight = (int)(imageWidth / aspectRatio);
 
             //Camera
-            double focalLength = 1;
+            double focalLength = 1.0;
             double viewportHeight = 2.0;
             double viewportWidth = viewportHeight * ((double)imageWidth / imageHeight);
 
@@ -41,7 +41,7 @@ namespace RayTracer
             Point P_00 = Q + 0.5 * (Du + Dv);
 
             #region Logging
-            Logger.Log("=====Setup======");
+            Logger.Log("===================================Setup=========================================");
             Logger.Log("Image Setup:");
             Logger.Log($"   Aspect Ratio: {aspectRatio}");
             Logger.Log($"   Pixel Width: {imageWidth}");
@@ -72,11 +72,12 @@ namespace RayTracer
             {
                 for (int j = 0; j < imageWidth; j++)
                 {
-                    double r = (double)i / (imageHeight - 1);
-                    double g = (double)j / (imageWidth - 1);
-                    double b = 0.0;
+                    Point pixelLocation = P_00 + j * Du + i * Dv;
+                    Direction rayDirection = pixelLocation - C;
+                    Ray ray = new Ray(C, rayDirection);
 
-                    WriteColour(i, j, new Colour(r, g, b), bitmap);
+                    Colour pixelColour = ComputeRayColour(ray);
+                    WriteColour(i, j, pixelColour, bitmap);
 
                     count++;
 
@@ -87,6 +88,14 @@ namespace RayTracer
 
             return ProduceBitmap(bitmap);
         }
+
+        private static Colour ComputeRayColour(Ray ray)
+        {
+            Vec3 unitDirection = ray.Direction.UnitVector;
+            double a = 0.5 * (unitDirection.Y + 1.0);
+            return (1.0 - a) * new Colour(1.0, 1.0, 1.0) + a * new Colour(0.5, 0.7, 1.0);
+        }
+
         private static WriteableBitmap ProduceBitmap(int[,,] source)
         {
             int height = source.GetLength(0);
@@ -133,11 +142,11 @@ namespace RayTracer
 
         }
 
-        private static void WriteColour(int i, int j, Colour colour, int[,,] bitmap)
+        private static void WriteColour(int row, int col, Colour colour, int[,,] bitmap)
         {
-            bitmap[i, j, 0] = (int)(255.9999 * colour[0]);
-            bitmap[i, j, 1] = (int)(255.9999 * colour[1]);
-            bitmap[i, j, 2] = (int)(255.9999 * colour[2]);
+            bitmap[row, col, 0] = (int)(255.9999 * colour[0]);
+            bitmap[row, col, 1] = (int)(255.9999 * colour[1]);
+            bitmap[row, col, 2] = (int)(255.9999 * colour[2]);
         }
 
     }
