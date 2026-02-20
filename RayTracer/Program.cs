@@ -7,13 +7,56 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Point3 = RayTracer.Vec3;
+using Point = RayTracer.Vec3;
+using Colour = RayTracer.Vec3;
+using ProjectUtilities;
 
 namespace RayTracer
 {
     public static class Program
     {
-        public static WriteableBitmap ProduceBitmap(int[,,] source)
+
+        public static object Main(IProgress<double> progress)
+        {
+            Logger.Initialise("C:\\Users\\leonh\\OneDrive\\Desktop\\log");
+
+            //setup
+            double aspectRatio = 16.0 / 9.0;
+            int imageWidth = 400;
+            int imageHeight = (int)(imageWidth / aspectRatio);
+            double viewportHeight = 2.0;
+            double viewportWidth = viewportHeight * ((double)imageWidth / imageHeight);
+
+            Logger.Log("Hello");
+
+            imageHeight = imageHeight < 1 ? 1 : imageHeight;
+            int color_depth = 3;
+            int[,,] bitmap = new int[imageHeight, imageWidth, color_depth];
+            int total = imageHeight * imageWidth;
+            int count = 0;
+
+
+
+            for (int i = 0; i < imageHeight; i++)
+            {
+                for (int j = 0; j < imageWidth; j++)
+                {
+                    double r = (double)i / (imageHeight - 1);
+                    double g = (double)j / (imageWidth - 1);
+                    double b = 0.0;
+
+                    WriteColour(i, j, new Colour(r, g, b), bitmap);
+
+                    count++;
+
+                    if (count % 500 == 0)
+                        progress?.Report((double)count / total);
+                }
+            }
+
+            return ProduceBitmap(bitmap);
+        }
+        private static WriteableBitmap ProduceBitmap(int[,,] source)
         {
             int height = source.GetLength(0);
             int width = source.GetLength(1);
@@ -58,40 +101,13 @@ namespace RayTracer
             return writeableBitmap;
 
         }
-        public static object Main(IProgress<double> progress)
+
+        private static void WriteColour(int i, int j, Colour colour, int[,,] bitmap)
         {
-            Point3 p1 = new Point3();
-            Point3 p2 = new Point3();
-            Point3 p3 = p1 + p2;
-
-            int image_width = 256;
-            int image_height = 256;
-            int color_depth = 3;
-            int[,,] bitmap = new int[image_height, image_width, color_depth];
-
-            int total = image_height * image_width;
-            int count = 0;
-
-            for (int i = 0; i < image_height; i++)
-            {
-                for (int j =0; j < image_width; j++)
-                {
-                    double r = (double)i / (image_height - 1);
-                    double g = (double)j / (image_width - 1);
-                    double b = 0.0;
-
-                    bitmap[i, j, 0] = (int)(255.9999 * r);
-                    bitmap[i, j, 1] = (int)(255.9999 * g);
-                    bitmap[i, j, 2] = (int)(255.9999 * b);
-
-                    count++;
-
-                    if (count % 500 == 0)
-                        progress?.Report((double)count / total);
-                }
-            }
-
-            return ProduceBitmap(bitmap);
+            bitmap[i, j, 0] = (int)(255.9999 * colour[0]);
+            bitmap[i, j, 1] = (int)(255.9999 * colour[1]);
+            bitmap[i, j, 2] = (int)(255.9999 * colour[2]);
         }
+
     }
 }
