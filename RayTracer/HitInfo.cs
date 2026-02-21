@@ -18,6 +18,7 @@ namespace RayTracer
 
         public void SetFaceNormal(Ray ray, Direction outwardsNormal)
         {
+            //Always want the normal pointing in the opposite direction of the ray
             double dot = Vec3Util.Dot(ray.Direction, outwardsNormal);
             Normal = dot > 0.0 ? -outwardsNormal : outwardsNormal;
         }
