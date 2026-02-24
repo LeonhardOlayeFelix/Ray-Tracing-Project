@@ -22,8 +22,7 @@ namespace RayTracer
         private int[,,] bitmap;
         private int color_depth = 3;
         public double AspectRatio = 1.0;
-        public int ImageWidth = 100;
-        public int SamplingRate = 1;
+        public int ImageWidth = 456;
         public WriteableBitmap render(Hittable world)
         {
             Initialise();
@@ -32,18 +31,9 @@ namespace RayTracer
             {
                 for (int j = 0; j < ImageWidth; j++)
                 {
-                    Colour pixelColour = new Colour(0, 0, 0);
                     Point pixelLocation = P_00 + j * Du + i * Dv;
-                    for (int k = 0; k < SamplingRate; k++)
-                    {
-                        Point HitLocation = pixelLocation + 0.5 * MathHelper.Random() * Dv + 0.5 * MathHelper.Random() * Du;
-                        Direction rayDirection = HitLocation - _center;
-                        Ray ray = new Ray(_center, rayDirection);
-
-                        pixelColour += RayColour(ray, world);
-                    }
-
-                    pixelColour = pixelColour / SamplingRate;
+                    Ray ray = new Ray(_center, pixelLocation - _center);
+                    Colour pixelColour = RayColour(ray, world);
                     WriteColour(i, j, pixelColour, bitmap);
                 }
             }
