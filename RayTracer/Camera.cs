@@ -21,24 +21,34 @@ namespace RayTracer
         private Direction Dv;
         private int[,,] bitmap;
         private int color_depth = 3;
+        private int _samplesPerPixel = 20;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
-        public WriteableBitmap render(Hittable world)
+        public int[,,] render(Hittable world)
         {
             Initialise();
+            int count = 0;
+            int total = ImageWidth * _imageHeight;
 
             for (int i = 0; i < _imageHeight; i++)
             {
                 for (int j = 0; j < ImageWidth; j++)
                 {
                     Point pixelLocation = P_00 + j * Du + i * Dv;
-                    Ray ray = new Ray(_center, pixelLocation - _center);
-                    Colour pixelColour = RayColour(ray, world);
-                    WriteColour(i, j, pixelColour, bitmap);
+                    Colour pixelColour = new Colour(0, 0, 0);
+                    for (int k = 0; k < _samplesPerPixel; k++)
+                    {
+                        Point hitLocation = pixelLocation + MathHelper.RandomMinMax(-0.5, 0.5) * Du + MathHelper.RandomMinMax(-0.5, 0.5) * Dv;
+                        Ray ray = new Ray(_center, hitLocation - _center);
+                        pixelColour += RayColour(ray, world);
+                    }
+                    count++;
+                    Program.Progress.RenderProgress.Report((double)count / total);
+                    WriteColour(i, j, pixelColour / _samplesPerPixel, bitmap);
                 }
             }
 
-            return ProduceBitmap(bitmap);
+            return bitmap;
         }
 
         private void Initialise()
@@ -83,50 +93,6 @@ namespace RayTracer
             bitmap[row, col, 2] = (int)(255.9999 * colour[2]);
         }
 
-        private static WriteableBitmap ProduceBitmap(int[,,] source)
-        {
-            int height = source.GetLength(0);
-            int width = source.GetLength(1);
-            WriteableBitmap writeableBitmap = new WriteableBitmap(
-                width,
-                height,
-                96,
-                96,
-                PixelFormats.Bgr32,
-                null);
-            writeableBitmap.Lock();
-
-            unsafe
-            {
-                byte* basePtr = (byte*)writeableBitmap.BackBuffer;
-                int stride = writeableBitmap.BackBufferStride;
-
-                for (int y = 0; y < height; y++)
-                {
-                    byte* rowPtr = basePtr + y * stride;
-
-                    for (int x = 0; x < width; x++)
-                    {
-                        int r = source[y, x, 0];
-                        int g = source[y, x, 1];
-                        int b = source[y, x, 2];
-
-                        rowPtr[x * 4 + 0] = (byte)b;
-                        rowPtr[x * 4 + 1] = (byte)g;
-                        rowPtr[x * 4 + 2] = (byte)r;
-                        rowPtr[x * 4 + 3] = 255;
-                    }
-                }
-            }
-
-            writeableBitmap.AddDirtyRect(
-                new Int32Rect(0, 0, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
-            );
-
-            writeableBitmap.Unlock();
-
-            return writeableBitmap;
-
-        }
+        
     }
 }

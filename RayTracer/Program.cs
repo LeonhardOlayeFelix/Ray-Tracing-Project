@@ -15,6 +15,7 @@ namespace RayTracer
 {
     public static class Program
     {
+        public static RayTracerProgress Progress = new RayTracerProgress();
         public static object Main()
         {
 
@@ -28,7 +29,7 @@ namespace RayTracer
             cam.AspectRatio = 16.0 / 9.0;
             cam.ImageWidth = 400;
 
-            WriteableBitmap render = cam.render(world);
+            int[,,] render = cam.render(world);
             return render;
         }
     }
