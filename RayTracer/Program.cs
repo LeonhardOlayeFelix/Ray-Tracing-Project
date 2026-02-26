@@ -15,14 +15,10 @@ namespace RayTracer
 {
     public static class Program
     {
-        public static Point Center;
-        public static double Radius;
-        public static object Main(Point center, double radius)
+        public static object Main()
         {
-            Center = center;
-            Radius = radius;
 
-            Sphere sphere1 = new Sphere(Center, Radius);
+            Sphere sphere1 = new Sphere(new Point(0, 0, -1), 0.5);
             Sphere sphere2 = new Sphere(new Point(0, -100.5, -1), 100);
             HittableCollection world = new HittableCollection();
             world.Add(sphere1);
