@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ProjectUtilities;
 using Ray_Tracing_Project.View;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Ray_Tracing_Project
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            DispatcherHelp.Initialise();
 
             MainView mainView = new MainView();
             mainView.ShowDialog();
