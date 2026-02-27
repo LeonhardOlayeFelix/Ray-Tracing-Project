@@ -15,13 +15,28 @@ namespace RayTracer
         {
             return degrees * Pi / 180.0;
         }
-        public static double Random()
+        public static double RandomDouble()
         {
-            return _gen.Next(0, 1);
+            return _gen.NextDouble();
         }
-        public static double RandomMinMax(double min, double max)
+        public static double RandomDouble(double min, double max)
         {
-            return min + (max - min) * Random();
+            return min + (max - min) * RandomDouble();
+        }
+        public static double RandomDouble(Interval interval)
+        {
+            return RandomDouble(interval.Min, interval.Max);
+        }
+        public static Vec3 RandomVec3(Interval? xInterval, Interval? yInterval, Interval? zInterval)
+        {
+            xInterval ??= new Interval(0, 0);
+            yInterval ??= new Interval(0, 0);
+            zInterval ??= new Interval(0, 0);
+            return new Vec3(RandomDouble(xInterval), RandomDouble(yInterval), RandomDouble(zInterval));
+        }
+        public static Vec3 RandomVec3(Interval interval)
+        {
+            return RandomVec3(interval, interval, interval);
         }
     }
 }

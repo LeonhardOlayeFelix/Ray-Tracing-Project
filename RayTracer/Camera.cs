@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,11 +10,14 @@ using System.Windows.Media.Imaging;
 using Colour = RayTracer.Vec3;
 using Direction = RayTracer.Vec3;
 using Point = RayTracer.Vec3;
+using Displacement = RayTracer.Vec3;
 
 namespace RayTracer
 {
+
     public class Camera
     {
+        private static Interval _intensity = new Interval(0, 0.999999);
         private int _imageHeight;
         private Point _center;
         private Point P_00;
@@ -21,7 +25,7 @@ namespace RayTracer
         private Direction Dv;
         private int[,,] bitmap;
         private int color_depth = 3;
-        private int _samplesPerPixel = 20;
+        private int _samplesPerPixel = 200;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
         public int[,,] render(Hittable world)
@@ -34,12 +38,11 @@ namespace RayTracer
             {
                 for (int j = 0; j < ImageWidth; j++)
                 {
-                    Point pixelLocation = P_00 + j * Du + i * Dv;
+                    Point pixelLocation = P_00 + i * Dv + j * Du;
                     Colour pixelColour = new Colour(0, 0, 0);
                     for (int k = 0; k < _samplesPerPixel; k++)
                     {
-                        Point hitLocation = pixelLocation + MathHelper.RandomMinMax(-0.5, 0.5) * Du + MathHelper.RandomMinMax(-0.5, 0.5) * Dv;
-                        Ray ray = new Ray(_center, hitLocation - _center);
+                        Ray ray = GetOffsetRay(i, j);
                         pixelColour += RayColour(ray, world);
                     }
                     count++;
@@ -50,6 +53,19 @@ namespace RayTracer
 
             return bitmap;
         }
+
+        private Ray GetOffsetRay(int i, int j)
+        {
+            Interval interval = new Interval(-0.5, 0.5);
+            Displacement Offset = MathHelper.RandomVec3(interval, interval, null);
+
+            Point q_n = P_00 + Dv * (i + Offset.X) + Du * (j + Offset.Y);
+            Point C = _center;
+
+            return new Ray(C, q_n - C);
+        }
+
+
 
         private void Initialise()
         {
@@ -85,12 +101,11 @@ namespace RayTracer
             double a = 0.5 * (unitDirection.Y + 1.0);
             return (1.0 - a) * new Colour(1.0, 1.0, 1.0) + a * new Colour(0.5, 0.7, 1.0);
         }
-
         private static void WriteColour(int row, int col, Colour colour, int[,,] bitmap)
         {
-            bitmap[row, col, 0] = (int)(255.9999 * colour[0]);
-            bitmap[row, col, 1] = (int)(255.9999 * colour[1]);
-            bitmap[row, col, 2] = (int)(255.9999 * colour[2]);
+            bitmap[row, col, 0] = (int)(256 * _intensity.Clamp(colour[0]));
+            bitmap[row, col, 1] = (int)(256 * _intensity.Clamp(colour[1]));
+            bitmap[row, col, 2] = (int)(256 * _intensity.Clamp(colour[2]));
         }
 
         

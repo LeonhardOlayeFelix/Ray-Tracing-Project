@@ -37,6 +37,11 @@ namespace RayTracer
             return x;
         }
 
+        public override string ToString()
+        {
+            return $"[{Min}, {Max}]";
+        }
+
         public static readonly Interval Empty = new Interval(double.PositiveInfinity, double.NegativeInfinity);
         public static readonly Interval Universe = new Interval(double.NegativeInfinity, double.PositiveInfinity);
     }
