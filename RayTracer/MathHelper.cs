@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,21 +28,6 @@ namespace RayTracer
         {
             return RandomDouble(interval.Min, interval.Max);
         }
-        public static Vec3 RandomVec3(Interval? xInterval, Interval? yInterval, Interval? zInterval)
-        {
-            xInterval ??= new Interval(0, 0);
-            yInterval ??= new Interval(0, 0);
-            zInterval ??= new Interval(0, 0);
-            return new Vec3(RandomDouble(xInterval), RandomDouble(yInterval), RandomDouble(zInterval));
-        }
-        public static Vec3 RandomVec3(Interval interval)
-        {
-            return RandomVec3(interval, interval, interval);
-        }
-        public static Vec3 SampleXYUnitSquare()
-        {
-            Interval interval = new Interval(-0.5, 0.5);
-            return RandomVec3(interval, interval, null);
-        }
+        
     }
 }

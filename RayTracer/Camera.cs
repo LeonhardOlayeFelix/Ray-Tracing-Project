@@ -25,7 +25,7 @@ namespace RayTracer
         private Direction Dv;
         private int[,,] bitmap;
         private int color_depth = 3;
-        private int _samplesPerPixel = 100;
+        private int _samplesPerPixel = 200;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
         public int[,,] render(Hittable world)
@@ -58,7 +58,7 @@ namespace RayTracer
 
         private Ray GetOffsetRay(int i, int j)
         {
-            Displacement Offset = MathHelper.SampleXYUnitSquare();
+            Displacement Offset = Vec3Util.SampleXYSquare(0.5);
 
             Point q_n = P_00 + Dv * (i + Offset.X) + Du * (j + Offset.Y);
             Point C = _center;
@@ -95,7 +95,9 @@ namespace RayTracer
 
             if (world.hit(ray, new Interval(0, MathHelper.Infinity), ref hitInfo))
             {
-                return 0.5 * new Colour(hitInfo.Normal.X + 1, hitInfo.Normal.Y + 1, hitInfo.Normal.Z + 1);
+                Direction direction = Vec3Util.SampleUnitHemisphere(hitInfo.Normal);
+                //Keeps bouncing until it hits nothing
+                return 0.5 * RayColour(new Ray(hitInfo.IntersectionPoint, direction), world);
             }
 
             Vec3 unitDirection = ray.Direction.UnitVector;
