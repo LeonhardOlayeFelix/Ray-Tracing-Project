@@ -25,7 +25,7 @@ namespace RayTracer
         private Direction Dv;
         private int[,,] bitmap;
         private int color_depth = 3;
-        private int _samplesPerPixel = 200;
+        private int _samplesPerPixel = 100;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
         public int[,,] render(Hittable world)
@@ -46,7 +46,9 @@ namespace RayTracer
                         pixelColour += RayColour(ray, world);
                     }
                     count++;
+
                     Program.Progress.RenderProgress.Report((double)count / total);
+
                     WriteColour(i, j, pixelColour / _samplesPerPixel, bitmap);
                 }
             }
@@ -56,8 +58,7 @@ namespace RayTracer
 
         private Ray GetOffsetRay(int i, int j)
         {
-            Interval interval = new Interval(-0.5, 0.5);
-            Displacement Offset = MathHelper.RandomVec3(interval, interval, null);
+            Displacement Offset = MathHelper.SampleXYUnitSquare();
 
             Point q_n = P_00 + Dv * (i + Offset.X) + Du * (j + Offset.Y);
             Point C = _center;

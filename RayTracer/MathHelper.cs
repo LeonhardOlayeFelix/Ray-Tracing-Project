@@ -38,5 +38,10 @@ namespace RayTracer
         {
             return RandomVec3(interval, interval, interval);
         }
+        public static Vec3 SampleXYUnitSquare()
+        {
+            Interval interval = new Interval(-0.5, 0.5);
+            return RandomVec3(interval, interval, null);
+        }
     }
 }
