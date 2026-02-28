@@ -25,7 +25,7 @@ namespace RayTracer
         private Direction Dv;
         private int[,,] bitmap;
         private int _colorDepth = 3;
-        private int _maxBounces = 10;
+        private int _maxBounces = 30;
         private int _samplesPerPixel = 200;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
@@ -96,12 +96,13 @@ namespace RayTracer
 
             HitInfo hitInfo = new HitInfo();
 
-            if (world.hit(ray, new Interval(0, MathHelper.Infinity), ref hitInfo))
+            if (world.hit(ray, new Interval(0.001, MathHelper.Infinity), ref hitInfo))
             {
                 Direction normal = hitInfo.Normal;
-                Direction direction = Vec3Util.SampleUnitHemisphere(hitInfo.Normal);
+                Displacement rnd = Vec3Util.UniformUnitSphere();
+                Direction direction = normal;
                 //Keeps bouncing until it hits nothing. Loses 10% energy each bounce i.e getting darker
-                return 0.75 * RayColour(new Ray(hitInfo.IntersectionPoint, direction), bouncesRemaining - 1, world);
+                return 0.9 * RayColour(new Ray(hitInfo.IntersectionPoint, direction), bouncesRemaining - 1, world);
             }
 
             Vec3 unitDirection = ray.Direction.UnitVector;

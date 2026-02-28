@@ -83,7 +83,7 @@ namespace RayTracer
             Interval interval = new Interval(-1, 1);
             return RandomVec3(interval);
         }
-        public static Vec3 SampleUnitSphere()
+        public static Vec3 UniformUnitSphere()
         {
             while (true)
             {
@@ -94,9 +94,9 @@ namespace RayTracer
             }
 
         }
-        public static Vec3 SampleUnitHemisphere(Vec3 normal)
+        public static Vec3 UniformUnitHemisphere(Vec3 normal)
         {
-            Vec3 result = SampleUnitSphere();
+            Vec3 result = UniformUnitSphere();
             if (Dot(normal, result) > 0.0)
                 return result;
             return -result;
