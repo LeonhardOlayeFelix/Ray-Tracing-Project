@@ -15,6 +15,7 @@ namespace RayTracer
         public Direction Normal { get; set; }
         public double t { get; set; }
         public bool FrontFace { get; set; }
+        public Material Material { get; set; }
 
         public void SetFaceNormal(Ray ray, Direction outwardsNormal)
         {

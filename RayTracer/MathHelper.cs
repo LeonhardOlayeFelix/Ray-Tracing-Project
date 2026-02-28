@@ -36,6 +36,5 @@ namespace RayTracer
             }
             return 0;
         }
-        
     }
 }

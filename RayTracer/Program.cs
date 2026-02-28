@@ -19,8 +19,8 @@ namespace RayTracer
         public static object Main()
         {
 
-            Sphere sphere1 = new Sphere(new Point(0, 0, -1), 0.5);
-            Sphere sphere2 = new Sphere(new Point(0, -100.5, -1), 100);
+            Sphere sphere1 = new Sphere(new Point(0, 0, -1), 0.5, MaterialFactory.RedLambertian);
+            Sphere sphere2 = new Sphere(new Point(0, -100.5, -1), 100, MaterialFactory.BlueLambertian);
             HittableCollection world = new HittableCollection();
             world.Add(sphere1);
             world.Add(sphere2);

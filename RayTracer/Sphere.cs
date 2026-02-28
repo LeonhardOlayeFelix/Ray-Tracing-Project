@@ -12,10 +12,13 @@ namespace RayTracer
     {
         private Point _center { get; set; }
         private double _radius { get; set; }
-        public Sphere(Point center, double radius)
+        private Material _material { get; set; }
+
+        public Sphere(Point center, double radius, Material material)
         {
             _center = center;
             _radius = radius;
+            _material = material;
         }
         public override bool hit(Ray ray, Interval bounds, ref HitInfo hitInfo)
         {
@@ -42,6 +45,7 @@ namespace RayTracer
             hitInfo.IntersectionPoint = ray.At(t);
             hitInfo.t = t;
             hitInfo.SetFaceNormal(ray, (hitInfo.IntersectionPoint - _center).UnitVector);
+            hitInfo.Material = _material;
             return true;
         }
     }

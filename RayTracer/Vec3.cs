@@ -101,5 +101,11 @@ namespace RayTracer
                 return result;
             return -result;
         }
+        public static bool NearZero(Vec3 vector)
+        {
+            double s = 1e-8;
+            return Math.Abs(vector.X) < s && Math.Abs(vector.Y) < s && Math.Abs(vector.Z) < s;
+        }
+
     } 
 }
