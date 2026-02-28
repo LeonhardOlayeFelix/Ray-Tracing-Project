@@ -106,6 +106,9 @@ namespace RayTracer
             double s = 1e-8;
             return Math.Abs(vector.X) < s && Math.Abs(vector.Y) < s && Math.Abs(vector.Z) < s;
         }
-
+        public static Vec3 Reflect(Vec3 v, Vec3 n)
+        {
+            return v - 2 * Dot(v, n) * n;
+        }
     } 
 }

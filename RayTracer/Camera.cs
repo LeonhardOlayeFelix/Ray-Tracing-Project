@@ -26,7 +26,7 @@ namespace RayTracer
         private int[,,] bitmap;
         private int _colorDepth = 3;
         private int _maxBounces = 30;
-        private int _samplesPerPixel = 20;
+        private int _samplesPerPixel = 200;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
         public int[,,] render(Hittable world)
@@ -103,7 +103,7 @@ namespace RayTracer
                 Direction direction = normal;
 
                 Ray scatteredRay = null;
-                Colour attenuation = null;
+                Colour attenuation = new Colour(1, 1, 1);
 
                 if (hitInfo.Material.Scatter(ray, ref hitInfo, ref attenuation, ref scatteredRay)) //If scattered, send scattered ray. Otherwise blacken
                     return attenuation * RayColour(scatteredRay, bouncesRemaining-1, world);

@@ -24,7 +24,6 @@ namespace RayTracer
             return true;
         }
     }
-
     public class LambertianMaterial : Material
     {
         private Colour _albedo;
@@ -43,6 +42,24 @@ namespace RayTracer
             return true;
         }
     }
+    public class MetalMaterial : Material
+    {
+        private Colour _albedo;
+        private double _fuzz;
+        public MetalMaterial(Colour albedo, double fuzz = 0)
+        {
+            _albedo = albedo;
+            _fuzz = fuzz < 1 ? fuzz : 1;
+        }
+        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, ref Colour attenuation, ref Ray scatteredRay)
+        {
+            Direction direction = Vec3Util.Reflect(incomingRay.Direction, hitInfo.Normal).UnitVector;
+            scatteredRay = new Ray(hitInfo.IntersectionPoint, direction + _fuzz * Vec3Util.UniformUnitSphere());
+            attenuation = _albedo;
+            return true;
+        }
+    }
+
     public static class ColourFactory
     {
         public static Colour Red => new Colour(1, 0, 0);
@@ -56,5 +73,13 @@ namespace RayTracer
         public static Material GreenLambertian => new LambertianMaterial(ColourFactory.Green);
         public static Material BlueLambertian => new LambertianMaterial(ColourFactory.Blue);
         public static Material WhiteLambertian => new LambertianMaterial(ColourFactory.White);
+        public static Material UpwardsMaterial => new UpwardsMaterial();
+        public static Material RedMetal => new MetalMaterial(ColourFactory.Red);
+        public static Material GreenMetal => new MetalMaterial(ColourFactory.Green);
+        public static Material BlueMetal => new MetalMaterial(ColourFactory.Blue);
+        public static Material Ball0Material => new LambertianMaterial(new Colour(0.8, 0.8, 0.0));
+        public static Material Ball1Material => new LambertianMaterial(new Colour(0.1, 0.2, 0.5));
+        public static Material Ball2Material => new MetalMaterial(new Colour(0.8, 0.8, 0.8), 0.5);
+        public static Material Ball3Material => new MetalMaterial(new Colour(0.8, 0.6, 0.2), 1);
     }
 }

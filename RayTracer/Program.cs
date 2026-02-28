@@ -18,12 +18,15 @@ namespace RayTracer
         public static RayTracerProgress Progress = new RayTracerProgress();
         public static object Main()
         {
-
-            Sphere sphere1 = new Sphere(new Point(0, 0, -1), 0.5, MaterialFactory.RedLambertian);
-            Sphere sphere2 = new Sphere(new Point(0, -100.5, -1), 100, MaterialFactory.BlueLambertian);
+            Sphere sphere0 = new Sphere(new Point(0, -100.5, -1), 100, MaterialFactory.Ball0Material);
+            Sphere sphereCenter = new Sphere(new Point(0.0, 0.0, -1.2), 0.5, MaterialFactory.Ball1Material);
+            Sphere sphereLeft = new Sphere(new Point(-1.0, 0.0, -1.0), 0.5, MaterialFactory.Ball2Material);
+            Sphere sphereRight = new Sphere(new Point(1.0, 0.0, -1.0), 0.5, MaterialFactory.Ball3Material);
             HittableCollection world = new HittableCollection();
-            world.Add(sphere1);
-            world.Add(sphere2);
+            world.Add(sphere0);
+            world.Add(sphereCenter);
+            world.Add(sphereLeft);
+            world.Add(sphereRight);
 
             Camera cam = new Camera();
             cam.AspectRatio = 16.0 / 9.0;
