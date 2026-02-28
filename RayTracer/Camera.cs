@@ -111,9 +111,9 @@ namespace RayTracer
         }
         private static void WriteColour(int row, int col, Colour colour, int[,,] bitmap)
         {
-            bitmap[row, col, 0] = (int)(256 * _intensity.Clamp(colour[0]));
-            bitmap[row, col, 1] = (int)(256 * _intensity.Clamp(colour[1]));
-            bitmap[row, col, 2] = (int)(256 * _intensity.Clamp(colour[2]));
+            bitmap[row, col, 0] = (int)(256 * _intensity.Clamp(MathHelper.LinearToGamma(colour[0])));
+            bitmap[row, col, 1] = (int)(256 * _intensity.Clamp(MathHelper.LinearToGamma(colour[1])));
+            bitmap[row, col, 2] = (int)(256 * _intensity.Clamp(MathHelper.LinearToGamma(colour[2])));
         }
 
         

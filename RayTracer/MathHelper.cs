@@ -28,6 +28,14 @@ namespace RayTracer
         {
             return RandomDouble(interval.Min, interval.Max);
         }
+        public static double LinearToGamma(double val)
+        {
+            if (val > 0)
+            {
+                return Math.Sqrt(val);
+            }
+            return 0;
+        }
         
     }
 }
