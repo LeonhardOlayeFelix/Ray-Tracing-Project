@@ -24,7 +24,8 @@ namespace RayTracer
         private Direction Du;
         private Direction Dv;
         private int[,,] bitmap;
-        private int color_depth = 3;
+        private int _colorDepth = 3;
+        private int _maxBounces = 10;
         private int _samplesPerPixel = 200;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
@@ -43,7 +44,7 @@ namespace RayTracer
                     for (int k = 0; k < _samplesPerPixel; k++)
                     {
                         Ray ray = GetOffsetRay(i, j);
-                        pixelColour += RayColour(ray, world);
+                        pixelColour += RayColour(ray, _maxBounces, world);
                     }
                     count++;
 
@@ -59,10 +60,8 @@ namespace RayTracer
         private Ray GetOffsetRay(int i, int j)
         {
             Displacement Offset = Vec3Util.SampleXYSquare(0.5);
-
             Point q_n = P_00 + Dv * (i + Offset.X) + Du * (j + Offset.Y);
             Point C = _center;
-
             return new Ray(C, q_n - C);
         }
 
@@ -74,7 +73,7 @@ namespace RayTracer
             _imageHeight = (int)(ImageWidth / AspectRatio);
             _imageHeight = (_imageHeight < 1) ? 1 : _imageHeight;
 
-            bitmap = new int[_imageHeight, ImageWidth, color_depth];
+            bitmap = new int[_imageHeight, ImageWidth, _colorDepth];
 
             _center = new Point(0, 0, 0);
             double focalLength = 1.0;
@@ -89,15 +88,20 @@ namespace RayTracer
             P_00 = Q + 0.5 * (Du + Dv);
         }
 
-        private Colour RayColour(Ray ray, Hittable world)
+        private Colour RayColour(Ray ray, int bouncesRemaining, Hittable world)
         {
+            //If too many bounces occured assume all energy was lost i.e return black
+            if (bouncesRemaining <= 0)
+                return new Colour(0, 0, 0);
+
             HitInfo hitInfo = new HitInfo();
 
             if (world.hit(ray, new Interval(0, MathHelper.Infinity), ref hitInfo))
             {
+                Direction normal = hitInfo.Normal;
                 Direction direction = Vec3Util.SampleUnitHemisphere(hitInfo.Normal);
-                //Keeps bouncing until it hits nothing
-                return 0.5 * RayColour(new Ray(hitInfo.IntersectionPoint, direction), world);
+                //Keeps bouncing until it hits nothing. Loses 10% energy each bounce i.e getting darker
+                return 0.75 * RayColour(new Ray(hitInfo.IntersectionPoint, direction), bouncesRemaining - 1, world);
             }
 
             Vec3 unitDirection = ray.Direction.UnitVector;
