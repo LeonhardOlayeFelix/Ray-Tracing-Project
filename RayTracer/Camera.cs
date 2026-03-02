@@ -25,8 +25,8 @@ namespace RayTracer
         private Direction Dv;
         private int[,,] bitmap;
         private int _colorDepth = 3;
-        private int _maxBounces = 30;
-        private int _samplesPerPixel = 200;
+        private int _maxBounces = 5;
+        private int _samplesPerPixel = 100;
         public double AspectRatio = 1.0;
         public int ImageWidth = 456;
         public int[,,] render(Hittable world)
@@ -98,10 +98,6 @@ namespace RayTracer
 
             if (world.hit(ray, new Interval(0.001, MathHelper.Infinity), ref hitInfo))
             {
-                Direction normal = hitInfo.Normal;
-                Displacement rnd = Vec3Util.UniformUnitSphere();
-                Direction direction = normal;
-
                 Ray scatteredRay = null;
                 Colour attenuation = new Colour(1, 1, 1);
 
