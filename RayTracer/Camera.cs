@@ -98,10 +98,7 @@ namespace RayTracer
 
             if (world.hit(ray, new Interval(0.001, MathHelper.Infinity), ref hitInfo))
             {
-                Ray scatteredRay = null;
-                Colour attenuation = new Colour(1, 1, 1);
-
-                if (hitInfo.Material.Scatter(ray, ref hitInfo, ref attenuation, ref scatteredRay)) //If scattered, send scattered ray. Otherwise blacken
+                if (hitInfo.Material.Scatter(ray, ref hitInfo, out Colour attenuation, out Ray scatteredRay)) //If scattered, send scattered ray. Otherwise blacken
                     return attenuation * RayColour(scatteredRay, bouncesRemaining-1, world);
 
                 return new Colour(0, 0, 0);

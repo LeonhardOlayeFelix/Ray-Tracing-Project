@@ -13,14 +13,15 @@ namespace RayTracer
 {
     public abstract class Material
     {
-        public abstract bool Scatter(Ray incomingRay, ref HitInfo hitInfo, ref Vec3 attenuation, ref Ray scatteredRay);
+        public abstract bool Scatter(Ray incomingRay, ref HitInfo hitInfo, out Vec3 attenuation, out Ray scatteredRay);
     }
 
     public class UpwardsMaterial : Material
     {
-        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, ref Colour attenuation, ref Ray scatteredRay)
+        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, out Colour attenuation, out Ray scatteredRay)
         {
             scatteredRay = new Ray(hitInfo.IntersectionPoint, hitInfo.Normal);
+            attenuation = new Colour(1, 1, 1);
             return true;
         }
     }
@@ -31,7 +32,7 @@ namespace RayTracer
         {
             _albedo = albedo;
         }
-        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, ref Colour attenuation, ref Ray scatteredRay)
+        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, out Colour attenuation, out Ray scatteredRay)
         {
             scatteredRay = new Ray(hitInfo.IntersectionPoint, hitInfo.Normal + Vec3Util.UniformUnitSphere());
 
@@ -51,7 +52,7 @@ namespace RayTracer
             _albedo = albedo;
             _fuzz = fuzz < 1 ? fuzz : 1;
         }
-        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, ref Colour attenuation, ref Ray scatteredRay)
+        public override bool Scatter(Ray incomingRay, ref HitInfo hitInfo, out Colour attenuation, out Ray scatteredRay)
         {
             Direction direction = Vec3Util.Reflect(incomingRay.Direction, hitInfo.Normal).UnitVector;
             scatteredRay = new Ray(hitInfo.IntersectionPoint, direction + _fuzz * Vec3Util.UniformUnitSphere());
